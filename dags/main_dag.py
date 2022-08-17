@@ -43,7 +43,7 @@ with DAG(
     )
 
     hubspot_sync = FivetranOperator(
-        task_id="hubspot-ads-sync",
+        task_id="hubspot-sync",
         connector_id="sociological_administrator",
     )
 
