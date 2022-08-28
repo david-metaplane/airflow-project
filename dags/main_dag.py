@@ -53,6 +53,17 @@ with DAG(
         poke_interval=600,
     )
 
+    linkedin_pages_sync = FivetranOperator(
+        task_id="linkedin-pages-sync",
+        connector_id="challenge_grieve",
+    )
+
+    linkedin_pages_sensor = FivetranSensor(
+        task_id="linkedin-pages-sensor",
+        connector_id="challenge_grieve",
+        poke_interval=600,
+    )
+
     trigger_dbt_cloud_job_run = DbtCloudRunJobOperator(
         task_id="trigger_dbt_cloud_job_run",
         job_id=117628,
@@ -62,4 +73,5 @@ with DAG(
 
     stripe_sync >> stripe_sensor
     hubspot_sync >> hubspot_sensor
-    [stripe_sensor, hubspot_sensor] >> trigger_dbt_cloud_job_run
+    linkedin_pages_sync >> linkedin_pages_sensor
+    [stripe_sensor, hubspot_sensor, linkedin_pages_sensor] >> trigger_dbt_cloud_job_run
